@@ -5,8 +5,8 @@ const withMDX = createMDX();
 /** @type {import('next').NextConfig} */
 const config = {
   output: 'export',
-  // served at https://odoolings.ronit.io/ (custom domain, see public/CNAME),
-  // root path, no basePath.
+  // served at https://camptocamp.github.io/odoolings/; keep lib/shared.ts in step.
+  basePath: '/odoolings',
   trailingSlash: true,
   reactStrictMode: true,
   // Required, and silently so. Fumadocs maps markdown `![]()` to next/image, and

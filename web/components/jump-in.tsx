@@ -1,4 +1,5 @@
 import { ChevronDown } from 'lucide-react';
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { CopyOnlyCodeBlock } from './copy-button';
 import { Icon } from './icon';
@@ -81,9 +82,9 @@ export function JumpIn({ chapter }: { chapter: string }) {
                 docker compose up -d
               </code>
               , as set up in{' '}
-              <a href={SETUP} className="font-medium text-fd-primary underline underline-offset-2">
+              <Link href={SETUP} className="font-medium text-fd-primary underline underline-offset-2">
                 chapter 5
-              </a>
+              </Link>
               .
             </p>
           </Step>

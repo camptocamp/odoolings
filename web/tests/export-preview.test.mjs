@@ -47,12 +47,13 @@ function findStubRoute(dir = 'content/docs', base = '/docs') {
 
 /** Every exported docs route, read off the sitemap the build just produced. */
 function docsRoutes(sitemapBody) {
-  return [...sitemapBody.matchAll(/<loc>https:\/\/odoolings\.ronit\.io([^<]*)<\/loc>/g)]
+  return [...sitemapBody.matchAll(/<loc>https:\/\/camptocamp\.github\.io\/odoolings([^<]*)<\/loc>/g)]
     .map((m) => m[1] || '/');
 }
 
 const port = 49173;
-const origin = `http://127.0.0.1:${port}`;
+const host = `http://127.0.0.1:${port}`;
+const origin = `${host}/odoolings`;
 const server = spawn(process.execPath, ['scripts/serve-export.mjs'], {
   env: { ...process.env, PORT: String(port) },
   stdio: ['ignore', 'pipe', 'pipe'],
@@ -78,7 +79,7 @@ async function waitForServer() {
 
 try {
   const home = await waitForServer();
-  assert.equal(home.status, 200, 'the custom-domain root must render without redirecting');
+  assert.equal(home.status, 200, 'the project-page root must render without redirecting');
   const homeBody = await home.text();
   assert.match(homeBody, /<title>Odoolings: Free Odoo 19 Development Tutorial<\/title>/);
   assert.match(homeBody, /Learn Odoo 19 development for free by building a real module/);
@@ -88,9 +89,9 @@ try {
 
   const lessonRoute = '/docs/00-orientation/01-what-odoo-is/';
   const lesson = await fetch(`${origin}${lessonRoute}`);
-  assert.equal(lesson.status, 200, `${lessonRoute} should resolve from the domain root`);
+  assert.equal(lesson.status, 200, `${lessonRoute} should resolve under the base path`);
   const lessonBody = await lesson.text();
-  assert.match(lessonBody, /rel="canonical" href="https:\/\/odoolings\.ronit\.io\/docs\/00-orientation\/01-what-odoo-is\/"/);
+  assert.match(lessonBody, /rel="canonical" href="https:\/\/camptocamp\.github\.io\/odoolings\/docs\/00-orientation\/01-what-odoo-is\/"/);
   assert.match(lessonBody, /"@type":"LearningResource"/);
 
   // All 50 planned chapters are written as of ch50; findStubRoute() returns
@@ -105,7 +106,7 @@ try {
   }
 
   const sitemap = await fetch(`${origin}/sitemap.xml`);
-  assert.equal(sitemap.status, 200, '/sitemap.xml should resolve from the domain root');
+  assert.equal(sitemap.status, 200, '/sitemap.xml should resolve under the base path');
   const sitemapBody = await sitemap.text();
   // The last chapter, whatever it is numbered today. Hard-coding the number here is
   // what made the D13 renumber fail in CI rather than locally, so match the slug and
@@ -129,7 +130,7 @@ try {
     '/api/search',
   ]) {
     const response = await fetch(`${origin}${route}`);
-    assert.equal(response.status, 200, `${route} should resolve from the domain root`);
+    assert.equal(response.status, 200, `${route} should resolve under the base path`);
   }
 
   /**
@@ -150,13 +151,16 @@ try {
       `${route} references the image optimizer, which 404s on static hosting. ` +
         'Set images: { unoptimized: true } in next.config.mjs.',
     );
+    // GitHub Pages serves the site under /odoolings/: a root path 404s there.
+    const rootPath = body.match(/(?:src|href)="(\/(?!odoolings\/)[^"]*)"/);
+    assert.equal(rootPath, null, `${route} references ${rootPath?.[1]} outside the base path`);
     for (const src of body.matchAll(/<img[^>]+src="(\/[^"]+)"/g)) {
-      const asset = await fetch(`${origin}${src[1]}`);
+      const asset = await fetch(`${host}${src[1]}`);
       assert.equal(asset.status, 200, `${route} references a missing image: ${src[1]}`);
     }
   }
 
-  console.log('export-preview.test.mjs: root-domain routes passed');
+  console.log('export-preview.test.mjs: base-path routes passed');
 } finally {
   if (server.exitCode === null) {
     server.kill('SIGTERM');
