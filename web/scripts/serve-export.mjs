@@ -3,7 +3,7 @@ import { stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { extname, join, resolve, sep } from 'node:path';
 // Keep in sync with next.config.mjs and lib/shared.ts.
-const basePath = process.env.BASE_PATH ?? '';
+const basePath = process.env.BASE_PATH ?? '/odoolings';
 
 const root = resolve('out');
 const port = Number(process.env.PORT ?? 3000);

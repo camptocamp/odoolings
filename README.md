@@ -1,7 +1,7 @@
 # Odoolings
 
 <p align="center">
-  <a href="https://odoolings.ronit.io">
+  <a href="https://camptocamp.github.io/odoolings">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="web/public/brand/odoolings-wordmark-on-ink.png">
       <source media="(prefers-color-scheme: light)" srcset="web/public/brand/odoolings-wordmark-on-paper.png">
@@ -13,7 +13,7 @@
 A free, open-source Odoo 19 development tutorial: zero Odoo knowledge to OCA-quality
 contributions, taught by building one real module rather than disconnected examples.
 
-### [**📖 Start the free Odoo 19 tutorial →**](https://odoolings.ronit.io/)
+### [**📖 Start the free Odoo 19 tutorial →**](https://camptocamp.github.io/odoolings/)
 
 No signup, no account. Progress and quiz scores live in your browser only.
 
@@ -39,7 +39,7 @@ No signup, no account. Progress and quiz scores live in your browser only.
 ## Where it's at
 
 All 55 chapters are written; what's left before launch is polish. See the
-[roadmap](https://odoolings.ronit.io/docs/roadmap) for the full milestone breakdown.
+[roadmap](https://camptocamp.github.io/odoolings/docs/roadmap) for the full milestone breakdown.
 
 ## Following the tutorial?
 
